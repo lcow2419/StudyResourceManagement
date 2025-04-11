@@ -13,8 +13,6 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 
 
 
-
-
 # Load environment variables
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -107,6 +105,8 @@ def register():
 
     finally:
         db.close()  # Close the database connection
+        
+        
 
 # ---------------------------
 # USER LOGIN ROUTE
@@ -156,6 +156,8 @@ def login():
         return jsonify({"error": str(err)}), 500  # Return error if a database query fails
     finally:
         db.close()  # Ensure database connection is closed after the operation
+        
+        
 
 # ---------------------------
 # PROTECTED ROUTE (Requires Authentication)
@@ -169,6 +171,8 @@ def protected():
     """
     current_user = get_jwt_identity()  # Retrieves user details from the JWT
     return jsonify({"message": "Welcome!", "user": current_user}), 200  # Responds with the user details
+    
+    
     
 # ---------------------------
 # GET SUBJECTS ROUTE
@@ -190,6 +194,8 @@ def get_subjects():
             return jsonify(subjects), 200  # Return the list of subjects as JSON
     finally:
         db.close()  # Ensure the database connection is closed
+        
+        
 
 # ---------------------------
 # ADD SUBJECT ROUTE
@@ -229,6 +235,8 @@ def add_subject():
         return jsonify({"error": str(err)}), 500  # Handle DB errors
     finally:
         db.close()  # Close DB connection
+
+
 
 
 # AWS S3 Config
@@ -320,6 +328,8 @@ def upload_material():
         return jsonify({"error": str(err)}), 500
     finally:
         db.close()  
+        
+        
         
 # Initialize AWS SES Client
 ses_client = boto3.client("ses", region_name="ca-central-1")  
@@ -430,10 +440,6 @@ def get_comments(material_id):
     finally:
         cursor.close()
         db.close()
-
-    
-    
-    
     
 
 @app.route("/comments/<int:comment_id>/fix", methods=["PUT"])
